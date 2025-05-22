@@ -8,10 +8,10 @@ import java.util.List;
 public interface AccountTransactionsDAO {
     //최근 거래 내역 5개
 
-    List<AccountTransactionsVO> findAccountTransactionsByIdOrderByDateDescLimit5(int id);
+    List<AccountTransactionsVO> findAccountTransactionsByAccountIdOrderByDateDescLimit5(int accountId);
 
     // 특정 기간 거래 내역
-    List<AccountTransactionsVO> findAccountTransactionsByIdAndDate(int id, LocalDateTime start, LocalDateTime end);
+    List<AccountTransactionsVO> findAccountTransactionsByAccountIdAndDate(int accountId, LocalDateTime start, LocalDateTime end);
 
     //거래내역 추가
     int insertAccountTranscation(AccountTransactionsVO accountTransactionsVO);
