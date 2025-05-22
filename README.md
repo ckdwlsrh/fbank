@@ -44,3 +44,9 @@ fbank/
 │   │   └── resources/
 │   │       └── application.properties
 └── build.gradle
+
+---
+
+## 🤝 Contributing
+
+[📄 컨트리뷰팅 가이드 보러 가기](./.github/CONTRIBUTING.md)
