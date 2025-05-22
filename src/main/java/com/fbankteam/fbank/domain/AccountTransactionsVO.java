@@ -14,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountTransactionsVO {
-    private int id;
-    private int accountId;
+    private Integer id;
+    private Integer accountId;
     private TransactionType transactionType;
     private LocalDateTime transactionDate;
-    private int amount;
+    private Integer amount;
     private String toAccountNumber;
     private String receiverBankName;
     private String receiverName;
