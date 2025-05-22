@@ -10,7 +10,7 @@ import lombok.Builder;
 @Builder
 
 public class UserInfoVO {
-    private int id;
+    private Integer id;
     private String userName;
     private String rrn;
     private String phoneNumber;

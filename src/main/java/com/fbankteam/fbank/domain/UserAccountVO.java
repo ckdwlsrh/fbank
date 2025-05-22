@@ -10,8 +10,8 @@ import lombok.Builder;
 @Builder
 
 public class UserAccountVO {
-    private int id;
-    private int userInfoId;
+    private Integer id;
+    private Integer userInfoId;
     private String loginId;
     private String loginPassword;
 }
