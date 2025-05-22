@@ -44,6 +44,7 @@ fbank/
 │   │   └── resources/
 │   │       └── application.properties
 └── build.gradle
+```
 
 ---
 
