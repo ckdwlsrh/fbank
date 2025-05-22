@@ -23,5 +23,5 @@ public class AccountTransactionsVO {
     private String receiverBankName;
     private String receiverName;
 
-
+    //TODO: 조인을 위한 1:N 리스트 필요
 }
