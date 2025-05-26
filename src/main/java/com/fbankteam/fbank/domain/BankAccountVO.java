@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BankAccountVO {
     private Integer id;
-    private Integer userInfo;
+    private Integer userInfoId;
     private String accountNumber;
     private String accountPassword;
     private Integer balance;

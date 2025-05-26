@@ -9,17 +9,17 @@ public interface BankAccountDAO {
     int insertBankAccount(BankAccountVO bankAccount);
 
     // 계좌번호로 회원 정보 id 조회
-    int findUserIdByAccountNumber(String accountNumber);
+    int findUserInfoIdByAccountNumber(String accountNumber);
 
     // 최근 5개 계좌 조회
-    List<BankAccountVO> findTop5AccountsByUserId(int userId);
+    List<BankAccountVO> findTop5AccountsByUserInfoId(int userInfoId);
 
     // 내 계좌 전체 조회
-    List<BankAccountVO> findAccountsByUserId(int userId);
+    List<BankAccountVO> findAccountsByUserInfoId(int userInfoId);
 
     // 즐겨찾기 계좌 목록 조회
-    List<BankAccountVO> findFavoriteAccountsByUserId(int userId);
+    List<BankAccountVO> findFavoriteAccountsByUserInfoId(int userInfoId);
 
     // 즐겨찾기 토글
-    int toggleFavorite(int accountId, int userId);
+    int toggleFavorite(int accountId, int userInfoId);
 }
