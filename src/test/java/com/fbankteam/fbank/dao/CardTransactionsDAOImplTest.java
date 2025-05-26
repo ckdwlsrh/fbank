@@ -1,3 +1,5 @@
+package com.fbankteam.fbank.dao;
+
 import com.fbankteam.fbank.dao.CardTransactionsDAOImpl;
 import com.fbankteam.fbank.domain.CardTransactionsVO;
 import com.fbankteam.fbank.util.JDBCUtil;
