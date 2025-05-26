@@ -15,7 +15,7 @@ public class CardVo {
     private Integer userInfoId;
     private Integer accountId;
     private String cardNumber;
-    private String cardType;
+    private CardType cardType;
     private String cardPassword;
     private String cvcHash;
     private Integer monthlyLimit;
