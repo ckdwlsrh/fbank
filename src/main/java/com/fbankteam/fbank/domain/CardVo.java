@@ -20,4 +20,6 @@ public class CardVo {
     private String cvcHash;
     private Integer monthlyLimit;
     private Integer billingDay;
+
+    private CardTransactionsVO cardTransaction;
 }

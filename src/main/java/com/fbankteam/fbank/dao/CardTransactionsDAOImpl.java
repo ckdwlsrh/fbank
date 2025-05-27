@@ -1,6 +1,8 @@
 package com.fbankteam.fbank.dao;
 
 import com.fbankteam.fbank.domain.CardTransactionsVO;
+import com.fbankteam.fbank.domain.CardType;
+import com.fbankteam.fbank.domain.CardVo;
 import com.fbankteam.fbank.util.JDBCUtil;
 
 import java.sql.*;
@@ -11,7 +13,35 @@ import java.util.List;
 
 public class CardTransactionsDAOImpl implements CardTransactionsDAO {
     static Connection conn=JDBCUtil.getConnection();
+    @Override
+    public List<CardVo> findCardTransactionsByCardIdOrderByDateDescLimit5(int userInfoId){
+        String sql= """
+                SELECT a.id as card_id, a.card_number as card_number, a.card_type as card_type, b.id as id, b.amount as amount, b.transaction_date as transaction_date
+                FROM card a JOIN card_transactions b ON a.id = b.card_id 
+                WHERE a.user_info_id = ? 
+                ORDER BY b.transaction_date DESC LIMIT 5
+                """;
+        List<CardVo> cardVOList = new ArrayList<>();
+        try(PreparedStatement pstmt=conn.prepareStatement(sql)){
+            pstmt.setInt(1, userInfoId);
+            try(ResultSet rs=pstmt.executeQuery()){
+                while(rs.next()){
+                    CardTransactionsVO cardTransaction = map(rs);
+                    CardVo cardVO= CardVo.builder()
+                            .id(rs.getInt("card_id"))
+                            .cardNumber(rs.getString("card_number"))
+                            .cardType(CardType.valueOf(rs.getString("card_type")))
+                            .cardTransaction(cardTransaction).build();
+                    cardVOList.add(cardVO);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
+        return cardVOList;
+    }
+    
     @Override
     public int getMontlyTotalAmount(int cardID) {
         String sql = "SELECT SUM(amount) FROM card_transactions WHERE card_id = ? and transaction_date BETWEEN ? and ?";

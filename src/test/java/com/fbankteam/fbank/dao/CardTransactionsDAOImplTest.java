@@ -21,6 +21,14 @@ public class CardTransactionsDAOImplTest {
     }
 
     @Test
+    @DisplayName("최근 카드 거래내역 5개-카드정보포함")
+    void findCardTransactionsByCardIdOrderByDateDescLimit5(){
+        List<CardVo> list=dao.findCardTransactionsByCardIdOrderByDateDescLimit5(3);
+        System.out.println("최근 카드 거리내역 5개-카드정보포함");
+        list.forEach(System.out::println);
+    }
+
+    @Test
     @DisplayName("이번달 카드 총 이용 금액")
     void getMontlyTotalAmount() {
         int totalAmount=dao.getMontlyTotalAmount(1);
