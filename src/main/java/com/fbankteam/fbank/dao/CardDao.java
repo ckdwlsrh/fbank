@@ -16,4 +16,11 @@ public interface CardDao {
 
     // 카드 삭제
     void deleteCard(int cardId);
+
+
+    // 비밀번호 변경
+    void updateCardPassword(int cardId, String newPassword);
+
+    // 카드 상태 변경
+    void updateCardStatus(int cardId, String cardType);
 }
