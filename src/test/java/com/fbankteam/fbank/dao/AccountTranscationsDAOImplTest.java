@@ -1,6 +1,7 @@
 package com.fbankteam.fbank.dao;
 
 import com.fbankteam.fbank.domain.AccountTransactionsVO;
+import com.fbankteam.fbank.domain.BankAccountVO;
 import com.fbankteam.fbank.domain.TransactionType;
 import com.fbankteam.fbank.util.JDBCUtil;
 import org.junit.jupiter.api.*;
@@ -21,6 +22,13 @@ class AccountTranscationsDAOImplTest {
     @AfterAll
     static void tearDown() {
         JDBCUtil.close();
+    }
+
+    @Test
+    @DisplayName("유저id로 최근 거래내역 5개")
+    void findAccountTransactionsByUserIdOrderByDateDescLimit5() {
+        List<BankAccountVO> datas = dao.findAccountTransactionsByUserIdOrderByDateDescLimit5(2);
+        datas.forEach(System.out::println);
     }
 
     @Test

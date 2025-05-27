@@ -1,6 +1,8 @@
 package com.fbankteam.fbank.dao;
 
 import com.fbankteam.fbank.domain.AccountTransactionsVO;
+import com.fbankteam.fbank.domain.AccountType;
+import com.fbankteam.fbank.domain.BankAccountVO;
 import com.fbankteam.fbank.domain.TransactionType;
 import lombok.RequiredArgsConstructor;
 
@@ -26,22 +28,42 @@ public class AccountTranscationsDAOImpl implements AccountTransactionsDAO{
                 .amount(rs.getInt("amount"))
                 .toAccountNumber(rs.getString("to_account_number"))
                 .receiverBankName(rs.getString("receiver_bank_name"))
-                .receiverName("receiver_name")
+                .receiverName(rs.getString("receiver_name"))
                 .build();
         return data;
     }
 
     //TODO: 계좌와 계좌 거래 내역 조인 필요함!
     @Override
-    public List<AccountTransactionsVO> findAccountTransactionsByAccountIdOrderByDateDescLimit5(int id) {
-        String sql = "";
+    public List<BankAccountVO> findAccountTransactionsByUserIdOrderByDateDescLimit5(int userInfoId) {
+        String sql = "select a.id as account_id, a.account_number as account_number, a.account_type as account_type, " +
+                "b.id as id, " +
+                "b.transaction_type as transaction_type, b.transaction_date as transaction_date, " +
+                "b.amount as amount, b.to_account_number as to_account_number, " +
+                "b.receiver_bank_name as receiver_bank_name, b.receiver_name as receiver_name " +
+                "from bank_account a join account_transactions b on a.id = b.account_id " +
+                "where a.user_info_id = ? order by b.transaction_date desc " +
+                "limit 5";
+        List<BankAccountVO> datas = new ArrayList<>();
         try(PreparedStatement p = conn.prepareStatement(sql)) {
-
+            p.setInt(1, userInfoId);
+            try(ResultSet rs = p.executeQuery()) {
+                while(rs.next()) {
+                    AccountTransactionsVO tx = map(rs);
+                    BankAccountVO data = BankAccountVO.builder()
+                            .id(rs.getInt("account_id"))
+                            .accountNumber(rs.getString("account_number"))
+                            .accountType(AccountType.valueOf(rs.getString("account_type")))
+                            .transaction(tx)
+                            .build();
+                    datas.add(data);
+                }
+            }
         }
         catch(SQLException e) {
             throw new RuntimeException(e);
         }
-        return List.of();
+        return datas;
     }
 
     @Override
