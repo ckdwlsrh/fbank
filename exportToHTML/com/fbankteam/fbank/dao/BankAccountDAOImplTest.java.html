@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>BankAccountDAOImplTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #067d17;}
+.s3 { color: #1750eb;}
+.s4 { color: #8c8c8c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+BankAccountDAOImplTest.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com.fbankteam.fbank.dao;</span>
+
+<span class="s0">import </span><span class="s1">com.fbankteam.fbank.domain.AccountType;</span>
+<span class="s0">import </span><span class="s1">com.fbankteam.fbank.domain.BankAccountVO;</span>
+<span class="s0">import </span><span class="s1">com.fbankteam.fbank.util.JDBCUtil;</span>
+<span class="s0">import </span><span class="s1">org.junit.jupiter.api.*;</span>
+
+<span class="s0">import </span><span class="s1">java.time.LocalDateTime;</span>
+<span class="s0">import </span><span class="s1">java.util.List;</span>
+
+<span class="s0">import static </span><span class="s1">org.junit.jupiter.api.Assertions.*;</span>
+
+<span class="s0">class </span><span class="s1">BankAccountDAOImplTest {</span>
+
+    <span class="s0">static </span><span class="s1">BankAccountDAOImpl dao;</span>
+
+    <span class="s1">@BeforeAll</span>
+    <span class="s0">static void </span><span class="s1">setUp() {</span>
+        <span class="s1">dao = </span><span class="s0">new </span><span class="s1">BankAccountDAOImpl(JDBCUtil.getConnection());</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@AfterAll</span>
+    <span class="s0">static void </span><span class="s1">tearDown() {</span>
+        <span class="s1">JDBCUtil.close();</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@DisplayName(</span><span class="s2">&quot;계좌 등록 테스트&quot;</span><span class="s1">)</span>
+    <span class="s0">void </span><span class="s1">insertBankAccount() {</span>
+        <span class="s1">BankAccountVO account = BankAccountVO.builder()</span>
+                <span class="s1">.userInfoId(</span><span class="s3">1</span><span class="s1">)</span>
+                <span class="s1">.accountNumber(</span><span class="s2">&quot;999-8888-7777&quot;</span><span class="s1">)</span>
+                <span class="s1">.accountPassword(</span><span class="s2">&quot;abcd1234&quot;</span><span class="s1">)</span>
+                <span class="s1">.balance(</span><span class="s3">10000</span><span class="s1">)</span>
+                <span class="s1">.accountType(AccountType.SAVINGS)</span>
+                <span class="s1">.createAt(LocalDateTime.now())</span>
+                <span class="s1">.isFavorite(</span><span class="s0">false</span><span class="s1">)</span>
+                <span class="s1">.build();</span>
+
+        <span class="s0">int </span><span class="s1">result = dao.insertBankAccount(account);</span>
+
+        <span class="s1">assertEquals(</span><span class="s3">1</span><span class="s1">, result);</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@DisplayName(</span><span class="s2">&quot;계좌번호로 userInfoId 조회 테스트&quot;</span><span class="s1">)</span>
+    <span class="s0">void </span><span class="s1">findUserInfoIdByAccountNumber() {</span>
+        <span class="s1">String accountNumber = </span><span class="s2">&quot;999-8888-7777&quot;</span><span class="s1">; </span><span class="s4">// insert 테스트에서 등록한 계좌</span>
+        <span class="s0">int </span><span class="s1">userInfoId = dao.findUserInfoIdByAccountNumber(accountNumber);</span>
+
+        <span class="s1">assertEquals(</span><span class="s3">1</span><span class="s1">, userInfoId);</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@DisplayName(</span><span class="s2">&quot;즐겨찾기 토글 테스트&quot;</span><span class="s1">)</span>
+    <span class="s0">void </span><span class="s1">toggleFavorite() {</span>
+        <span class="s4">// 테스트를 위해 계좌를 먼저 등록</span>
+        <span class="s1">BankAccountVO account = BankAccountVO.builder()</span>
+                <span class="s1">.userInfoId(</span><span class="s3">2</span><span class="s1">)</span>
+                <span class="s1">.accountNumber(</span><span class="s2">&quot;555-1111-2222&quot;</span><span class="s1">)</span>
+                <span class="s1">.accountPassword(</span><span class="s2">&quot;pass123&quot;</span><span class="s1">)</span>
+                <span class="s1">.balance(</span><span class="s3">2000</span><span class="s1">)</span>
+                <span class="s1">.accountType(AccountType.SAVINGS)</span>
+                <span class="s1">.createAt(LocalDateTime.now())</span>
+                <span class="s1">.isFavorite(</span><span class="s0">false</span><span class="s1">)</span>
+                <span class="s1">.build();</span>
+        <span class="s1">dao.insertBankAccount(account);</span>
+
+        <span class="s4">// 등록된 계좌 ID를 가져오기</span>
+        <span class="s1">List&lt;BankAccountVO&gt; accounts = dao.findAccountsByUserInfoId(</span><span class="s3">2</span><span class="s1">);</span>
+        <span class="s1">assertFalse(accounts.isEmpty());</span>
+        <span class="s0">int </span><span class="s1">accountId = accounts.get(</span><span class="s3">0</span><span class="s1">).getId();</span>
+
+        <span class="s4">// 즐겨찾기 토글</span>
+        <span class="s0">int </span><span class="s1">updateCount = dao.toggleFavorite(accountId, </span><span class="s3">2</span><span class="s1">);</span>
+        <span class="s1">assertEquals(</span><span class="s3">1</span><span class="s1">, updateCount);</span>
+
+        <span class="s4">// 변경 확인</span>
+        <span class="s1">BankAccountVO updated = dao.findAccountsByUserInfoId(</span><span class="s3">2</span><span class="s1">).get(</span><span class="s3">0</span><span class="s1">);</span>
+        <span class="s1">assertTrue(updated.getIsFavorite());</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@DisplayName(</span><span class="s2">&quot;전체 계좌 조회 테스트&quot;</span><span class="s1">)</span>
+    <span class="s0">void </span><span class="s1">findAccountsByUserInfoId() {</span>
+        <span class="s1">List&lt;BankAccountVO&gt; list = dao.findAccountsByUserInfoId(</span><span class="s3">1</span><span class="s1">);</span>
+        <span class="s1">assertNotNull(list);</span>
+        <span class="s1">list.forEach(System.out::println);</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@DisplayName(</span><span class="s2">&quot;최근 5개 계좌 조회 테스트&quot;</span><span class="s1">)</span>
+    <span class="s0">void </span><span class="s1">findTop5AccountsByUserInfoId() {</span>
+        <span class="s1">List&lt;BankAccountVO&gt; list = dao.findTop5AccountsByUserInfoId(</span><span class="s3">1</span><span class="s1">);</span>
+        <span class="s1">assertTrue(list.size() &lt;= </span><span class="s3">5</span><span class="s1">);</span>
+        <span class="s1">list.forEach(System.out::println);</span>
+    <span class="s1">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s1">@DisplayName(</span><span class="s2">&quot;즐겨찾기 계좌 조회 테스트&quot;</span><span class="s1">)</span>
+    <span class="s0">void </span><span class="s1">findFavoriteAccountsByUserInfoId() {</span>
+        <span class="s1">List&lt;BankAccountVO&gt; list = dao.findFavoriteAccountsByUserInfoId(</span><span class="s3">2</span><span class="s1">);</span>
+        <span class="s1">list.forEach(System.out::println);</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>

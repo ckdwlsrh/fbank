@@ -20,4 +20,5 @@ public class BankAccountVO {
     private AccountType accountType; //'SAVINGS' or 'INSTALLMENT'
     private LocalDateTime createAt;
     private Boolean isFavorite;
+    private AccountTransactionsVO transaction;
 }
